@@ -45,3 +45,48 @@ def lire_mtx(nom_fichier):
                 out[i].append(j)
  
     return n, out 
+
+
+#  PARTIE 2 - PRODUIT VECTEUR * MATRICE CREUSE
+# =============================================================
+#
+#  La matrice P de taille N x N n'est JAMAIS stockee en memoire.
+#  On sait juste que :
+#
+#    P[i][j] = 1 / degre_sortant(i)   si l'arc i->j existe
+#    P[i][j] = 0                       sinon
+#
+#  Donc pour calculer nouveau = x * P :
+#
+#    nouveau[j] = somme sur i de ( x[i] * P[i][j] )
+#               = somme sur i ayant un arc vers j de ( x[i] / degre(i) )
+#
+#  En pratique on fait ca en parcourant les arcs :
+#    pour chaque arc i -> j :
+#        nouveau[j] += x[i] / degre(i)
+#
+#  Complexite : O(M) avec M = nombre d'arcs  (au lieu de O(N^2))
+
+def produit_vecteur_matrice(x, out, n):
+    """
+    Calcule le produit x * P sans jamais construire P.
+    Retourne un nouveau vecteur de taille n.
+    """
+
+    resultat = [0.0] * n   # on initialise tout a zero
+
+    for i in range(n):
+        d = len(out[i])    # degre sortant de i = nombre de liens sortants
+
+        if d == 0:
+            # c'est un "dangling node" (page sans lien sortant)
+            # on ne peut pas diviser par 0, on le saute ici
+            # sa masse est geree separement dans pagerank()
+            continue
+
+        contribution = x[i] / d   # ce que i donne a chacun de ses voisins
+
+        for j in out[i]:           # pour chaque voisin j de i
+            resultat[j] += contribution   # j recoit la contribution de i
+
+    return resultat
