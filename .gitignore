@@ -1,0 +1,18 @@
+# --- Python ---
+# grandes matrices
+test_matrice/grande/*.txt
+test_matrice/grande/*.mtx
+
+
+# cache Python
+__pycache__/
+*.pyc
+
+
+
+# --- Extensions de matrices au cas où ---
+*.txt
+*.mtx
+
+# Exception : On veut garder le code, donc on n'ignore pas les .py s'ils sont dans un sous-dossier
+!*.py
